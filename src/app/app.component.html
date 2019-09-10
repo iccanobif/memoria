@@ -1,0 +1,12 @@
+<div *ngIf="gameOver">game over</div>
+<div *ngIf="!playing">
+  <p>Input <textarea [(ngModel)]="rawInput"></textarea></p>
+  <p><button (click)="go()">Go!</button></p>
+</div>
+<div *ngIf="playing">
+  <p>
+    {{ itemList[currentIndex] }}
+  </p>
+  <button (click)="ok()">OK</button>
+  <button (click)="ko()">KO</button>
+</div>
