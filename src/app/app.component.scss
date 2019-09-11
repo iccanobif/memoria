@@ -1,0 +1,23 @@
+#global-container
+{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+    border: 0;
+    margin: 0;
+    top: 0;
+    left: 0;
+}
+#bleh-container
+{
+    height: calc(100% - 100px);
+}
+textarea
+{
+    background-color: #081B33;
+    color: #767D92;
+    width: 100%;
+    height: 100%;
+    
+}

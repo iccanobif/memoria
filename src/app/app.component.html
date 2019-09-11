@@ -1,12 +1,17 @@
-<div *ngIf="gameOver">game over</div>
-<div *ngIf="!playing">
-  <p>Input <textarea [(ngModel)]="rawInput"></textarea></p>
-  <p><button (click)="go()">Go!</button></p>
-</div>
-<div *ngIf="playing">
-  <p>
-    {{ itemList[currentIndex] }}
-  </p>
-  <button (click)="ok()">OK</button>
-  <button (click)="ko()">KO</button>
+<div id="global-container">
+  <div *ngIf="!playing" id="bleh-container">
+    <h2>Input: </h2>
+    <textarea [(ngModel)]="rawInput"></textarea>
+    <div>
+      <button (click)="go()">Go!</button>
+      <span *ngIf="gameOver">game over</span>
+    </div>
+  </div>
+  <div *ngIf="playing">
+    <p>
+      {{ itemList[currentIndex] }}
+    </p>
+    <button (click)="ok()">OK</button>
+    <button (click)="ko()">KO</button>
+  </div>
 </div>
