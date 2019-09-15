@@ -1,8 +1,9 @@
 <div id="global-container">
-  <div *ngIf="!playing" id="bleh-container">
+
+  <div *ngIf="!playing" class="home-page-container">
     <h2>Input: </h2>
     <textarea [(ngModel)]="rawInput"></textarea>
-    <div>
+    <div class="buttons">
       <button (click)="go()">Go!</button>
       <span *ngIf="gameOver">game over</span>
     </div>
