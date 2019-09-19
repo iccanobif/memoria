@@ -12,7 +12,21 @@
     <p>
       {{ itemList[currentIndex] }}
     </p>
-    <button (click)="ok()">OK</button>
-    <button (click)="ko()">KO</button>
+    <button *ngIf="!solutionRevealed" (click)="revealSolution()">Reveal solution</button>
+    <button *ngIf="solutionRevealed" (click)="ok()">OK</button>
+    <button *ngIf="solutionRevealed" (click)="ko()">KO</button>
+    <div *ngIf="solutionRevealed">
+      {{ solution }}<br />
+      <a href="https://www.google.com/search?&q={{ itemList[currentIndex] }}" target="_blank">
+        google
+      </a>
+      <a href="https://jisho.org/search/{{ itemList[currentIndex] }}" target="_blank">
+        jisho
+      </a>
+      <a href="http://honyakustar.com/en/{{ itemList[currentIndex] }}" target="_blank">
+        honyakustar
+      </a>
+      
+    </div>
   </div>
 </div>

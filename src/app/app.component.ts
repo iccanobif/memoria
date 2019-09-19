@@ -9,6 +9,8 @@ export class AppComponent {
   rawInput: string
   playing: boolean = false
   gameOver: boolean = false
+  solutionRevealed: boolean = false
+  solution: string = ""
 
   itemList: string[]
   currentIndex: number
@@ -16,10 +18,30 @@ export class AppComponent {
   go() {
     this.playing = true
     this.itemList = this.rawInput
-                        .split("\n")
-                        .map(x => x.trim())
-                        .filter(x => x != "")
+      .split("\n")
+      .map(x => x.trim())
+      .filter(x => x != "")
     this.currentIndex = 0
+  }
+
+  revealSolution() {
+    this.solutionRevealed = true;
+    fetch("http://www.iccan.us/knaji_api/dictionary/" + this.itemList[this.currentIndex])
+      .then(res => {
+        return res.json()
+      })
+      .then(json => {
+        if (json.japaneseDefinitions.length == 0)
+          this.solution = "N/A"
+        else
+          this.solution = json.japaneseDefinitions
+            .map(x => x.readingElements.join("/")
+              + ": "
+              + x.glosses.join(" / "))
+      })
+      .catch((err) => {
+        this.solution = err
+      })
   }
 
   ok() {
@@ -30,6 +52,8 @@ export class AppComponent {
       this.playing = false
       this.gameOver = true
     }
+    this.solutionRevealed = false;
+    this.solution = ""
   }
 
   ko() {
@@ -37,5 +61,7 @@ export class AppComponent {
     if (this.currentIndex >= this.itemList.length
       || this.currentIndex >= 10)
       this.currentIndex = 0
+    this.solutionRevealed = false;
+    this.solution = ""
   }
 }
