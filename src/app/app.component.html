@@ -16,7 +16,11 @@
     <button *ngIf="solutionRevealed" (click)="ok()">OK</button>
     <button *ngIf="solutionRevealed" (click)="ko()">KO</button>
     <div *ngIf="solutionRevealed">
-      {{ solution }}<br />
+      <ul>
+        <li *ngFor="let s of solution">
+          {{ s}}
+        </li>
+      </ul>
       <a href="https://www.google.com/search?&q={{ itemList[currentIndex] }}" target="_blank">
         google
       </a>
