@@ -35,8 +35,8 @@ export class AppComponent {
           this.solution = "N/A"
         else
           this.solution = json.japaneseDefinitions
-            .map(x => x.readingElements.join("/")
-              + ": "
+            .map(x => x.kanjiElements.join("/") + " (" + x.readingElements.join("/")
+              + "): "
               + x.glosses.join(" / "))
       })
       .catch((err) => {
