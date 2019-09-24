@@ -9,6 +9,9 @@ app.use(bodyParser.text())
 
 const wrap = fn => (req, res, next) => fn(req, res, next).catch(next);
 
+app.get("/", (req, res) => {
+    res.send("MEMORIA API")
+})
 app.get("/word-list", wrap(async (req, res) => 
 {
     const mongoClient = new mongo.MongoClient("mongodb://localhost:27017", {
