@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   rawInput: string
   playing: boolean = false
   gameOver: boolean = false
@@ -15,7 +15,28 @@ export class AppComponent {
   itemList: string[]
   currentIndex: number
 
+  ngOnInit() {
+    fetch("api/word-list")
+      .then(res => {
+        res.text()
+          .then(text => {
+            this.rawInput = text
+          })
+          .catch(alert)
+      })
+      .catch(err => {
+        alert(err)
+      })
+  }
+
   go() {
+    fetch("api/word-list", {
+      method: "POST",
+      body: this.rawInput
+    })
+    .then(() => {})
+    .catch(alert)
+
     this.playing = true
     this.itemList = this.rawInput
       .split("\n")
