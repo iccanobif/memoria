@@ -7,39 +7,85 @@ const mongo = require("mongodb")
 
 app.use(bodyParser.text())
 
+// This wrapper is copypasted from somewhere... I'm not sure why it only catches
+// errors and doesn't do something like .then(next) too...
 const wrap = fn => (req, res, next) => fn(req, res, next).catch(next);
 
-app.get("/", (req, res) => {
+async function doStuffOnCollection(task)
+{
+    const mongoClient = new mongo.MongoClient("mongodb://localhost:27017", {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    const conn = await mongoClient.connect()
+    const db = conn.db("memoria")
+    const coll = db.collection("words")
+    await task(coll)
+    mongoClient.close()
+}
+
+app.get("/", (req, res) =>
+{
     res.send("MEMORIA API")
 })
-app.get("/word-list", wrap(async (req, res) => 
+
+app.get("/word", wrap(async (req, res) => 
 {
-    const mongoClient = new mongo.MongoClient("mongodb://localhost:27017", {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
+    await doStuffOnCollection(async coll =>
+    {
+        const cursor = await coll.find({ toBeLearned: true })
+        const arr = await cursor.toArray()
+        const merda = arr.map(x => x.word)
+        res.send(merda)
     })
-    const conn = await mongoClient.connect()
-    const db = conn.db("memoria")
-    const coll = db.collection("wordlist")
-    const wordList = await coll.findOne()
-    res.send(wordList.value)
-    mongoClient.close()
 }))
 
-app.post("/word-list", wrap(async (req, res) =>
+function removeDuplicates(list) 
 {
-    const mongoClient = new mongo.MongoClient("mongodb://localhost:27017", {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    })
-    const conn = await mongoClient.connect()
-    const db = conn.db("memoria")
-    const coll = db.collection("wordlist")
-    await coll.deleteMany({})
-    console.log(req.body)
-    await coll.insertOne({value: req.body})
+    const { listWithoutDuplicates } = list.reduce((acc, val) =>
+    {
+        if (acc.set.has(val))
+            return acc
+
+        acc.set.add(val)
+        acc.listWithoutDuplicates.push(val)
+        return acc
+
+    }, { listWithoutDuplicates: [], set: new Set() });
+    return listWithoutDuplicates;
+}
+
+app.delete("/word/:word", wrap(async (req, res) =>
+{
+    const word = req.params.word
+    await doStuffOnCollection(coll =>
+        coll.updateOne(
+            { word: word },
+            { $set: { toBeLearned: false } }
+        )
+    )
     res.send("OK")
-    await mongoClient.close()
+}))
+
+app.post("/word", wrap(async (req, res) =>
+{
+    const words = req.body
+        .split("\n")
+        .map(x => x.trim())
+        .filter(x => x != "")
+    const wordsWithoutDuplicates = removeDuplicates(words)
+
+    await doStuffOnCollection(async coll =>
+    {
+        for (let i = 0; i < wordsWithoutDuplicates.length; i++)
+        {
+            await coll.updateOne(
+                { word: wordsWithoutDuplicates[i] },
+                { $setOnInsert: { word: wordsWithoutDuplicates[i], toBeLearned: true } },
+                { upsert: true })
+        }
+    })
+    res.send("OK")
 }))
 
 app.listen(PORT, () => console.log("Listening to port " + PORT))

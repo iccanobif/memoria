@@ -1,0 +1,34 @@
+<div id="global-container">
+
+  <div *ngIf="!playing" class="home-page-container">
+    <a routerLink="/add-words">add words</a>
+    <button (click)="go()">Go!</button>
+    <span *ngIf="gameOver">game over</span>
+  </div>
+  <div *ngIf="playing">
+    <p>Remaining: {{ itemList.length }}</p>
+    <p>
+      {{ itemList[currentIndex] }}
+    </p>
+    <button *ngIf="!solutionRevealed" (click)="revealSolution()">Reveal solution</button>
+    <button *ngIf="solutionRevealed" (click)="ok()">OK</button>
+    <button *ngIf="solutionRevealed" (click)="ko()">KO</button>
+    <div *ngIf="solutionRevealed">
+      <ul>
+        <li *ngFor="let s of solution">
+          {{ s }}
+        </li>
+      </ul>
+      <a href="https://www.google.com/search?&q={{ itemList[currentIndex] }}" target="_blank">
+        google
+      </a>
+      <a href="https://jisho.org/search/{{ itemList[currentIndex] }}" target="_blank">
+        jisho
+      </a>
+      <a href="http://honyakustar.com/en/{{ itemList[currentIndex] }}" target="_blank">
+        honyakustar
+      </a>
+
+    </div>
+  </div>
+</div>
