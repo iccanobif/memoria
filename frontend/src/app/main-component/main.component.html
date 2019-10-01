@@ -13,6 +13,7 @@
     <button *ngIf="!solutionRevealed" (click)="revealSolution()">Reveal solution</button>
     <button *ngIf="solutionRevealed" (click)="ok()">OK</button>
     <button *ngIf="solutionRevealed" (click)="ko()">KO</button>
+    <button *ngIf="solutionRevealed" (click)="delete()">never show again</button>
     <div *ngIf="solutionRevealed">
       <ul>
         <li *ngFor="let s of solution">

@@ -20,13 +20,13 @@ export class MainComponentComponent implements OnInit {
 
   ngOnInit() {
 
-    this.route.data.subscribe((data: { words: string[] }) => {
-      this.itemList = data.words
-    })
+    // this.route.data.subscribe((data: { words: string[] }) => {
+    //   this.itemList = data.words
+    // })
   }
 
   go() {
-
+    this.itemList = this.route.snapshot.data.words.map((x: any) => x);
     this.playing = true
     this.currentIndex = 0
   }
@@ -42,7 +42,7 @@ export class MainComponentComponent implements OnInit {
           this.solution = ["N/A"]
         else
           this.solution = json.japaneseDefinitions
-            .map(x => x.kanjiElements.join("/") + " (" + x.readingElements.join("/")
+            .map((x: { kanjiElements: { join: (arg0: string) => string; }; readingElements: { join: (arg0: string) => string; }; glosses: { join: (arg0: string) => string; }; }) => x.kanjiElements.join("/") + " (" + x.readingElements.join("/")
               + "): "
               + x.glosses.join(" / "))
       })
@@ -70,5 +70,13 @@ export class MainComponentComponent implements OnInit {
       this.currentIndex = 0
     this.solutionRevealed = false;
     this.solution = []
+  }
+
+  delete() {
+    fetch("api/word/" + this.itemList[this.currentIndex], {
+      method: "DELETE"
+    })
+      .then(() => this.ok())
+      .catch(alert)
   }
 }
