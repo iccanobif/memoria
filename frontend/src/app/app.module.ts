@@ -20,7 +20,8 @@ export class MainResolver implements Resolve<string[]>
 
 const appRoutes: Routes = [
   { path: 'add-words', component: AddWordsComponent },
-  { path: '', component: MainComponent, resolve: { words: MainResolver } },
+  { path: 'game', component: MainComponent, resolve: { words: MainResolver } },
+  { path: '**', redirectTo: '/game'},
 ];
 
 
