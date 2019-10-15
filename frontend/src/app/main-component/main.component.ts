@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponentComponent implements OnInit {
-  
+
   playing: boolean = false
   gameOver: boolean = false
   solutionRevealed: boolean = false
@@ -19,6 +19,14 @@ export class MainComponentComponent implements OnInit {
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
+    document.addEventListener("keypress", (ev: KeyboardEvent) => {
+      switch (ev.key)
+      {
+        case "o": this.ok(); break;
+        case "k": this.ko(); break;
+        case "n": this.delete(); break;
+      }
+    })
 
     // this.route.data.subscribe((data: { words: string[] }) => {
     //   this.itemList = data.words
@@ -52,6 +60,8 @@ export class MainComponentComponent implements OnInit {
   }
 
   ok() {
+    if (!this.playing)
+      return
     this.itemList.splice(this.currentIndex, 1);
     if (this.currentIndex >= this.itemList.length)
       this.currentIndex = 0
@@ -64,6 +74,8 @@ export class MainComponentComponent implements OnInit {
   }
 
   ko() {
+    if (!this.playing)
+      return
     this.currentIndex++
     if (this.currentIndex >= this.itemList.length
       || this.currentIndex >= 10)
@@ -73,6 +85,8 @@ export class MainComponentComponent implements OnInit {
   }
 
   delete() {
+    if (!this.playing)
+      return
     fetch("api/word/" + this.itemList[this.currentIndex], {
       method: "DELETE"
     })
