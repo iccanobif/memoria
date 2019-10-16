@@ -25,6 +25,8 @@ export class MainComponentComponent implements OnInit {
         case "o": this.ok(); break;
         case "k": this.ko(); break;
         case "n": this.delete(); break;
+        case "Enter": this.revealSolution(); break;
+        default: console.log(ev.key)
       }
     })
 
@@ -60,7 +62,7 @@ export class MainComponentComponent implements OnInit {
   }
 
   ok() {
-    if (!this.playing)
+    if (!this.playing && !this.solutionRevealed)
       return
     this.itemList.splice(this.currentIndex, 1);
     if (this.currentIndex >= this.itemList.length)
@@ -74,7 +76,7 @@ export class MainComponentComponent implements OnInit {
   }
 
   ko() {
-    if (!this.playing)
+    if (!this.playing && !this.solutionRevealed)
       return
     this.currentIndex++
     if (this.currentIndex >= this.itemList.length
@@ -85,7 +87,7 @@ export class MainComponentComponent implements OnInit {
   }
 
   delete() {
-    if (!this.playing)
+    if (!this.playing && !this.solutionRevealed)
       return
     fetch("api/word/" + this.itemList[this.currentIndex], {
       method: "DELETE"
