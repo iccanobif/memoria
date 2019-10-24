@@ -57,7 +57,7 @@ export class MainComponentComponent implements OnInit {
               + x.glosses.join(" / "))
       })
       .catch((err) => {
-        this.solution = err
+        this.solution = [err]
       })
   }
 
