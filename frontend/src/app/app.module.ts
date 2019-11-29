@@ -6,6 +6,7 @@ import { RouterModule, Routes, Resolve, RouterStateSnapshot, ActivatedRouteSnaps
 import { AppComponent } from './app.component';
 import { MainComponentComponent as MainComponent } from './main-component/main.component';
 import { AddWordsComponent } from './add-words/add-words.component';
+import { GrammarComponent } from './grammar/grammar.component';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,8 @@ export class MainResolver implements Resolve<string[]>
 const appRoutes: Routes = [
   { path: 'add-words', component: AddWordsComponent },
   { path: 'game', component: MainComponent, resolve: { words: MainResolver } },
-  { path: '**', redirectTo: '/game'},
+  { path: "grammar", component: GrammarComponent },
+  { path: '**', redirectTo: '/game' },
 ];
 
 
@@ -30,7 +32,8 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     MainComponent,
-    AddWordsComponent
+    AddWordsComponent,
+    GrammarComponent
   ],
   imports: [
     BrowserModule,

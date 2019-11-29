@@ -1,0 +1,10 @@
+<div>
+    <button (click)="showsolution()">show solution</button>
+    <button (click)="next()">next</button>
+</div>
+<div>
+    {{ grammars[i].key }}
+</div>
+<div *ngIf="isSolutionVisible">
+    {{ grammars[i].value }}
+</div>
