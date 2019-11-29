@@ -201,10 +201,21 @@ export class GrammarComponent implements OnInit {
     this.grammars = this.shuffle(this.grammars)
   }
 
-  next() {
+  ok() {
+    this.isSolutionVisible = false;
+    this.grammars.splice(this.i, 1)
+    if (this.i == this.grammars.length)
+      this.i = 0
+    if (this.i > 10)
+      this.i = 0
+  }
+
+  ko() {
     this.isSolutionVisible = false;
     this.i = this.i + 1
     if (this.i == this.grammars.length)
+      this.i = 0
+    if (this.i > 10)
       this.i = 0
   }
 

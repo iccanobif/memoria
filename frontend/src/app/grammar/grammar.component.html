@@ -1,10 +1,16 @@
-<div>
-    <button (click)="showsolution()">show solution</button>
-    <button (click)="next()">next</button>
+<div *ngIf="grammars.length > 0">
+    <div>
+        <button (click)="showsolution()">show solution</button>
+        <button (click)="ok()">ok</button>
+        <button (click)="ko()">ko</button>
+    </div>
+    <div>
+        {{ grammars[i].key }}
+    </div>
+    <div *ngIf="isSolutionVisible">
+        {{ grammars[i].value }}
+    </div>
 </div>
-<div>
-    {{ grammars[i].key }}
-</div>
-<div *ngIf="isSolutionVisible">
-    {{ grammars[i].value }}
+<div *ngIf="grammars.length == 0">
+    FINITO!
 </div>
